@@ -194,6 +194,13 @@ pub fn build_ebpf<'a>(
                 rustflags.push(s);
             }
 
+            // TODO: respect rustflags set by user, instead of always passing +alu32.
+            if let Ok(cpu) = std::env::var("BPF_CPU") {
+                rustflags.push(SEPARATOR);
+                rustflags.push("-Ctarget-cpu=");
+                rustflags.push(&cpu);
+            }
+
             cmd.env("CARGO_ENCODED_RUSTFLAGS", rustflags);
         }
 
